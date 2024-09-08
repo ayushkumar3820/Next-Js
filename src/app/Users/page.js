@@ -1,34 +1,30 @@
 import Link from "next/link";
-
-async function getUsers(){
+import {style} from "../../style.css"; // Assuming you're using CSS modules
+import DeleteUser from "@/util/DeleteUser";
+async function getUsers() {
     const response = await fetch('http://localhost:3000/api/user');
     const data = await response.json();
     return data;
-}
-
-
-export default async function page({params}){
-
-    const user= await getUsers(params.userId);
-    console.log(user);
+  }
+  
+  export default async function Page() {
+    const users = await getUsers();
+    console.log(users);
+  
     return (
-        <div>
-            <h1>User detail</h1>
-            <h4>
-                Name: {user.name}
-            </h4>
-            <h4>Age : {user.age}</h4>
-            <h4>Email: {user.email}</h4>
-            <h4>
-                ID:{user.id}
-            </h4>
-        </div>
-    )
-    {
-        user.map((item)=>{
-            <div>
-                <Link href={`users/${item.id}`}>{item.name}</Link>
-            </div>
-        })
-    }
-}
+      <div>
+        <h1>User List</h1>
+        {users.map((item) => (
+          <div key={item.id} className="user-item">
+            <span>
+              <Link href={`/users/${item.id}`}>{item.name}</Link>
+            </span>
+            <span>
+              <Link href={`/users/${item.id}/update`}>EDIT</Link>
+            </span>
+            <DeleteUser id={item.id}></DeleteUser>
+          </div>
+        ))}
+      </div>
+    );
+  }

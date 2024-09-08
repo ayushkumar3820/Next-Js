@@ -14,16 +14,32 @@ export function GET(request, { params }) {
   );
 }
 
-export async function PUT(request, Content) {
-    // Get user data from request body
-    let payload = await request.json();
-    payload.id = Content.params.id;
-    console.log(payload);
-    if (!payload.id || !payload.name || !payload.email || !payload.password) {
-      return NextResponse.json(
-        { result: "Invalid Request", success: false },
-        { status: 400 }
-      );
-    }
-    return NextResponse.json({ result: payload, success: true }, { status: 200 });
+export async function PUT(request, content) {
+  let payload = await request.json();
+  payload.id = content.params.id;
+  console.log(payload);
+  if (!payload.id || !payload.name || !payload.email || !payload.password) {
+    return NextResponse.json(
+      { result: "Invalid Request", success: false },
+      { status: 400 }
+    );
   }
+  return NextResponse.json({ result: payload, success: true }, { status: 200 });
+}
+
+export function DELETE(request, content) {
+  let id = content.params.id;
+  if (id) {
+    return NextResponse.json(
+      { result: "User deleted", success: true },
+      { status: 200 }
+    );
+  }
+  return NextResponse.json(
+    {
+      result: "internal server error,  pla try  after  sometimes",
+      success: false,
+    },
+    { status: 400 }
+  );
+}
